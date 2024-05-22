@@ -1,0 +1,202 @@
+// 1. declare 5 sass variables and use them in rulesets
+
+$warning-color:yellow;
+$danger-color:red;
+$success-color:green;
+$primary-color:blue;
+$dark-color:black;
+$grape-color:purple;
+$large-font-size:30px;
+
+body{
+    color:$primary-color;
+}
+
+.button1{
+    background-color: $primary-color;
+    &:hover{
+        background-color: $warning-color;
+    }
+}
+
+.button2{
+    background-color: $primary-color;
+    &:hover{
+        background-color: $danger-color;
+    }
+}
+
+.button3{
+    background-color: $primary-color;
+    &:hover{
+        background-color: $success-color;
+        font-size: $large-font-size;
+    }
+}
+
+// 2. declare sass nested selectors that will generate this css
+// .container .box {
+//   background-color: yellow;
+//   border: 1px solid black;
+// }
+
+// .container .box .button {
+//   color: green;
+// }
+
+// .container .box.link {
+//   color: blue;
+// }
+
+// .container .box.link:hover {
+//   color: purple;
+// }
+.container {
+    .box{
+        background-color:$warning-color ;
+        border: 1px solid $dark-color;
+
+        .button{
+            color:$success-color;
+        }
+
+        .link{
+            color:$primary-color;
+            &:hover{
+                color: $grape-color;
+            }
+        }
+    }
+}
+
+
+
+// 3. declare and apply a mixin that will apply a ruleset to the hover, focus, and active state of a selector
+// example css output
+// }
+// .class-example2 {
+//     @include example;
+// }
+// .example1{
+//   @include color-change;
+// }
+
+// .example2{
+//   @include color-change;
+// }
+
+
+// .example1:hover {
+//   color: red;
+// }
+// .example1:focus {
+//   color: orange;
+// }
+// .example1:active {
+//   color: blue;
+// }
+
+// .example2:hover {
+//   color: red;
+// }
+// .example2:focus {
+//   color: orange;
+// }
+// .example2:active {
+//   color: blue;
+// }
+
+@mixin color-change{
+    &:hover{
+        color: $danger-color;
+    }
+    &:focus{
+        color: orange;
+    }
+    &:active{
+        color: $primary-color;
+    }
+}
+
+.example1{
+    @include color-change;
+}
+
+.example2{
+    @include color-change;
+}
+
+
+// 4. declare and apply a mixin that will apply a ruleset to the hover, focus, and active state of a selector with the values from a parameter
+// example css output
+// .example1 {
+//   @include example(red)
+// }
+
+// .example1:hover {
+//   color: red;
+// }
+// .example1:focus {
+//   color: red;
+// }
+// .example1:active {
+//   color: red;
+// }
+
+@mixin color-change-para($color){
+    &:hover{
+        color: $color;
+    }
+    &:focus{
+        color: $color;
+    }
+    &:active{
+        color: $color;
+    }
+}
+
+.example3{
+    @include color-change;
+}
+
+
+// 5. write a function that will return 50% if the parameter passed in is red and 100% if the parameter is blue, and 0% if anything else
+
+@function percentage($color){
+    @if($color == 'blue'){
+        @return 50%;
+    } @else if ($color == 'red'){
+        @return 100%;
+    } @else{
+        @return 0%;
+    }
+}
+// 6. write a loop that will generate .col-md-X selectors where X is a number from 1-12 and the ruleset of each selector is width: Y% where Y is 100/(12/X)
+
+$Xs:1,2,3,4,5,6,7,8,9,10,11,12;
+
+@each $X in $Xs {
+    .col-md-#{$X}{
+        $Y:100/(12/$X);
+        width:$Y%;
+    }
+}
+
+@for $i from 1 through 12 {
+    $X: $i;
+    $Y: 100 / (12 / $X);
+    .col-md-#{$X} {
+      width: $Y%;
+    }
+  }
+  
+
+  @function error-handle($percentage){
+    @if $percentage == 100% {
+        @error 'OMG'
+    } @else if $percentage == 50% {
+        @warn 'HEHEHE'
+    } @else if $percentage == 0%{
+        @debug 'BUG'
+    }
+  }
